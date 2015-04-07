@@ -30,18 +30,5 @@ class ArticleController extends Controller
             'category' => $category,
         ]);
     }
-//    /**
-//     * Finds and displays a Article entity.
-//     *
-//     * @Route("/{id}", name="article_show")
-//     * @Method("GET")
-//     */
-//    public function showAction($id)
-//    {
-//        $em = $this->getDoctrine()->getManager();
-//        $article = $em->getRepository('AppBundle:Article')->find($id);
-//        return $this->render('AppBundle:Article:show.html.twig',[
-//            'article' => $article,
-//        ]);
-//    }
+
 }

@@ -1,10 +1,25 @@
 <!-- application list -->
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/app/style.css') }}" type="text/css" rel="stylesheet" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+{% endblock %}
 <div class="container-fluid time" id="applications" >
 <!-- list by age -->
 {% set iter = 1 %}
     {% for category in category %}
-<div class='container-fluid {{ category.name }}' >
+<div class='container-fluid {{ category.name }}' style="background-color: {{ category.color }}" >
     <div class="container">
+        <h2> {{ category.name }}</h2>
         <div class="row" >
             <div class="time_down">
             </div>
@@ -14,183 +29,37 @@
                     {% set i=1 %}
               {#{% while the_query[$iter]->have_posts()) : $the_query[$iter]->the_post() %}#}
               {% for article in article %}
+                    {% if article.category == category %}
                     <article class="col-xs-4 " >
                         <div class="blackSquare">
-                            <a href='{{  article.id }}' style="width:100%; height:100%">
+
                                 <div class="row" >
+                                    <div class="footercredits col-xs-12"><p>{{ article.content }}</p>
                                     <div class="col-xs-10 col-xs-offset-1" style="background: url('{{ article.img }}') center center; background-size:cover; height:200px; ">
                                     </div>
-                                    <div class="titleblock col-xs-12"><p>{{ article.title }}blort</p>
+                                    <div class="titleblock col-xs-12"><p>{{ article.title }}</p>
                                     </div>
-                                </div></a>
+                                </div>
                         </div>
                     </article>
-                    {#<?php#}
-                    {% endfor %}
-                    {% endfor %}
-                {#if ($i%3==0): ?>#}
-                {#</div>#}
-                {#<div class="time_down">#}
-                {#</div>#}
-                {#<div class ="row">#}
-                    {#<?php#}
-                {#endif ;#}
-                {#$i++ ;?>#}
-                    {#<?php#}
-              {#endwhile ?>#}
+                    {% if i%3==0 %}
+                </div>
+                <div class="time_down">
+                </div>
+                <div class ="row">
+                {% endif %}
+                {% set i=i+1 %}
+                    {% endif %}
+                  {%  endfor  %}
                     {#<!-- end.article query -->#}
-                {#</div>#}
-                {#<div class="time_down">#}
-                {#</div>#}
+                </div>
+                <div class="time_down">
+                </div>
             </div>
         </div>
     </div>
 </div>
-{#<?php#}
-    {#$iter++;#}
-  {#} ?>#}
+{%  set iter=iter+1 %}
+{% endfor %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{#<!-- end.list by age -->#}
-{#<!-- get the list by categories -->#}
-{#<?php#}
-  {#$args = array#}
-  {#(#}
-    {#'type'                     => 'post',#}
-{#'child_of'                 => 0,#}
-{#'parent'                   => '',#}
-{#'orderby'                  => 'name',#}
-{#'order'                    => 'ASC',#}
-{#'hide_empty'               => 1,#}
-{#'hierarchical'             => 1,#}
-{#'exclude'                  => '',#}
-{#'include'                  => '',#}
-{#'number'                   => '',#}
-{#'taxonomy'                 => 'category',#}
-{#'pad_counts'               => false#}
-{#);#}
-{#$categories = get_categories( $args );#}
-{#$iteration =  0;#}
-{#/*for each category existing, do:*/#}
-{#foreach ($categories as $category)#}
-{#{#}
-{#$iteration ++;#}
-{#/*know the number of post in the selected category*/#}
-{#$queryCount[$iteration] =  new WP_Query( array( 'category_name'=>"$category->slug" )) ;#}
-{#$nbrArticle[$iteration] = 0;#}
-{#while ($queryCount[$iteration]->have_posts()) : $queryCount[$iteration]->the_post();#}
-{#$nbrArticle[$iteration] = $nbrArticle[$iteration]+1;#}
-{#endwhile ;#}
-
-
-
-
-
-
-
-
-
-
-{#if ($iteration%2==0)#}
-{#{#}
-{#echo '<div class="container-fluid middleapp listByCategory">';#}
-    {#}#}
-    {#else#}
-    {#{#}
-    {#echo '<div class="container-fluid listByCategory">';#}
-        {#}#}
-
-        {#/*adjust the "application" button in consequence*/#}
-
-        {#if ($nbrArticle[$iteration] > 3)#}
-        {#{?>#}
-        {#<style>.toHide<?php echo  $iteration ;?>{display: none;}  </style><?php#}
-        {#?> <div><input class='btnplus' onclick="functHiding(this)" type="submit" value="+" name='toHide<?php echo $iteration ?>' /> </div> <?php#}
-      {#}?>#}
-
-
-        {#<div class="container">#}
-
-            {#<div class="row" >#}
-                {#<div class="time_left col-xs-6">#}
-                    {#<?php $result = get_field('icone_categorie', 'category_'.$category->cat_ID); ?>#}
-                    {#<h2> <img class="icon" src="<?php echo $result ?>" alt="<?php echo $category->description ?>"/><?php echo $category->name; ?></h2>#}
-                {#</div>#}
-                {#<div class="time_right col-xs-6">#}
-                    {#<div class=" appNum" style="background-color: <?php echo (get_field('color_icon', 'category_'.$category->cat_ID)) ;?>">#}
-                        {#<p><?php echo $nbrArticle[$iteration].' application';if ($nbrArticle[$iteration]>1){ echo "s"; }?></p>#}
-                    {#</div>#}
-                {#</div>#}
-                {#<div class=" col-xs-12">#}
-                    {#<!-- article query -->#}
-                    {#<?php $query[$iteration] = new WP_Query( array(     'category_name'=>"$category->slug", 'posts_per_page' =>'-1')); ?>#}
-                    {#<div class="row">#}
-                        {#<?php#}
-            {#$i=1;#}
-            {#while ($query[$iteration]->have_posts()) : $query[$iteration]->the_post();#}
-                        {#$thumb_id = get_post_thumbnail_id( $post_id );#}
-                        {#$url = wp_get_attachment_url($thumb_id) ;#}
-                        {#if ($i>3)#}
-                        {#{ ?>#}
-                        {#<!-- tets -->#}
-                        {#<article class="col-xs-4  <?php echo 'toHide'.$iteration; ?>" >#}
-                            {#<?php#}
-              {#}#}
-              {#else#}
-              {#{?>#}
-                            {#<article class="col-xs-4 " >#}
-
-                                {#<?php#}
-              {#} ?>#}
-                                {#<div class="blackSquare">#}
-                                    {#<a href='<?php the_permalink() ?>' style="width:100%; height:100%">#}
-                                        {#<div class="row" >#}
-                                            {#<div class="col-xs-10 col-xs-offset-1" style="background: url('<?php echo $url; ?>') center center; background-size:cover; height:200px; ">#}
-                                            {#</div>#}
-                                            {#<div class="titleblock col-xs-12"><p><?php the_title(); ?></p>#}
-                                            {#</div>#}
-                                        {#</div></a>#}
-                                {#</div>#}
-                            {#</article>#}
-                            {#<?php#}
-              {#if ($i%3==0): ?>#}
-                    {#</div>#}
-                    {#<div class="time_down">#}
-                    {#</div>#}
-                    {#<div class ="row">#}
-                        {#<?php#}
-              {#endif ;#}
-
-
-              {#$i++ ; ?>#}
-                        {#<?php#}
-            {#endwhile ?>#}
-                        {#<!-- end.article query -->#}
-                    {#</div>#}
-                    {#<div class="time_down">#}
-                    {#</div>#}
-                {#</div>#}
-            {#</div>#}
-        {#</div>#}
-    {#</div>#}
-    {#<?php#}
-  {#}?>#}
-
-{#</div>#}
-{#<!-- end.get the list by category-->#}
 </div>
